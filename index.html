@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <title>Morning 3 + 15</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0a0c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Morning 3+15">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/icon-192.svg">
+  <link rel="icon" href="/icon-192.svg">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app">
+
+    <!-- HOME -->
+    <section class="view active" id="view-home">
+      <div class="greeting" id="greeting">Good morning, Michael</div>
+      <div class="topline">
+        <span class="eyebrow" id="todayDate">—</span>
+        <span class="streak" id="streakLabel"></span>
+      </div>
+
+      <div class="eyebrow" style="margin-bottom:6px">Today</div>
+      <div class="workout-name" id="homeWorkout">Workout A</div>
+      <div class="workout-emphasis" id="homeEmphasis">Hinge + pull</div>
+
+      <div class="rows" id="homeRows"></div>
+
+      <button class="btn btn-primary" id="startBtn">Start 15 Minutes</button>
+
+      <div class="footer-actions">
+        <button class="linkbtn" id="skipBtn">Not today</button>
+        <button class="linkbtn" id="changeBtn">Change workout</button>
+      </div>
+
+      <div id="lastSession"></div>
+
+      <div style="text-align:center;margin-top:26px">
+        <button class="linkbtn" id="historyBtn">History</button>
+      </div>
+    </section>
+
+    <!-- TIMER -->
+    <section class="view timer-view" id="view-timer">
+      <div class="timer-top">
+        <span class="eyebrow" id="timerWorkout">Workout A</span>
+        <span class="eyebrow" id="timerRound">Round 1/5</span>
+      </div>
+
+      <div class="dots" id="roundDots"></div>
+
+      <div class="ring-wrap">
+        <svg class="ring" id="ring" viewBox="0 0 100 100">
+          <circle class="track" cx="50" cy="50" r="46"></circle>
+          <circle class="fill" id="ringFill" cx="50" cy="50" r="46"></circle>
+        </svg>
+        <div class="ring-center">
+          <div class="clock" id="clock">0:60</div>
+          <div class="paused-flag" id="pausedFlag"></div>
+        </div>
+      </div>
+
+      <div class="now-name" id="nowName">Two-handed swing</div>
+      <div class="now-target" id="nowTarget">15-20 reps</div>
+      <div class="now-cue" id="nowCue"></div>
+
+      <div class="timer-fields" id="timerFields"></div>
+
+      <div class="up-next" id="upNext"></div>
+
+      <div class="transport">
+        <button class="btn btn-ghost" id="prevBtn" aria-label="Previous interval">‹</button>
+        <button class="btn btn-primary" id="pauseBtn">Pause</button>
+        <button class="btn btn-ghost" id="nextBtn" aria-label="Next interval">›</button>
+      </div>
+
+      <div class="footer-actions">
+        <button class="linkbtn" id="scaleBtn">Drop to 4 rounds</button>
+        <button class="linkbtn" id="abandonBtn">End session</button>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="view" id="view-history">
+      <div class="topline">
+        <span class="workout-name" style="font-size:1.6rem">History</span>
+        <button class="linkbtn" id="histBackBtn">Done</button>
+      </div>
+      <div id="histList"></div>
+      <div style="text-align:center;margin-top:26px">
+        <button class="linkbtn" id="copyDataBtn">Copy my data</button>
+      </div>
+    </section>
+
+    <!-- PAST SESSION -->
+    <section class="view" id="view-session">
+      <div class="topline">
+        <span class="workout-name" style="font-size:1.6rem" id="sessTitle">Workout A</span>
+        <button class="linkbtn" id="sessBackBtn">Done</button>
+      </div>
+      <div class="workout-emphasis" id="sessSub"></div>
+      <div class="rows" id="sessRows"></div>
+    </section>
+
+  </div>
+
+  <!-- OVERLAYS -->
+  <div class="overlay" id="ovLapse">
+    <div class="card">
+      <h2>Welcome back</h2>
+      <p id="lapseText"></p>
+      <button class="btn btn-primary" id="lapseDeload">Ease back in</button>
+      <button class="btn" id="lapseResume">Resume at my old numbers</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovDone">
+    <div class="card">
+      <div class="card-emoji">✓</div>
+      <h2 id="doneTitle">Done</h2>
+      <p id="doneText"></p>
+      <button class="btn btn-primary" id="doneClose">Finish</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovChange">
+    <div class="card">
+      <h2>Today's workout</h2>
+      <p>Overriding is recorded in your history. It does not change the rotation.</p>
+      <div id="changeOptions"></div>
+      <button class="btn btn-ghost" id="changeCancel" style="margin-top:14px">Cancel</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovConfirm">
+    <div class="card">
+      <h2 id="confirmTitle">Are you sure?</h2>
+      <p id="confirmText"></p>
+      <button class="btn btn-primary" id="confirmYes">Yes</button>
+      <button class="btn btn-ghost" id="confirmNo">Cancel</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovExport">
+    <div class="card">
+      <h2>Your data</h2>
+      <p id="exportNote">Copied to the clipboard. Paste it somewhere safe.</p>
+      <textarea class="export-box" id="exportBox" readonly></textarea>
+      <button class="btn btn-primary" id="exportClose">Close</button>
+    </div>
+  </div>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

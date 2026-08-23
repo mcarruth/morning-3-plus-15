@@ -1,0 +1,11 @@
+{
+  "name": "morning-3-plus-15",
+  "version": "1.0.0",
+  "description": "Daily kettlebell EMOM timer",
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  },
+  "license": "ISC"
+}

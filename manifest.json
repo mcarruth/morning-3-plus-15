@@ -1,0 +1,14 @@
+{
+  "name": "Morning 3 + 15",
+  "short_name": "Morning 3+15",
+  "description": "Daily kettlebell EMOM, chosen for you",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0c",
+  "theme_color": "#0a0a0c",
+  "icons": [
+    { "src": "/icon-192.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
