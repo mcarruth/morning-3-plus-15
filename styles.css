@@ -228,3 +228,44 @@ body {
 }
 
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* ---------- exercise help ---------- */
+
+.name-btn {
+  background: none; border: none; padding: 0; font: inherit; color: inherit;
+  cursor: pointer; text-align: left; display: inline-flex; align-items: center; gap: 6px;
+}
+.name-btn::after {
+  content: '?'; flex: none;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--surface-2); color: var(--dimmer);
+  font-size: 0.62rem; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.name-btn:active::after { background: var(--blue); color: #fff; }
+
+.now-name.name-btn { justify-content: center; width: 100%; }
+.now-name.name-btn::after { width: 18px; height: 18px; font-size: 0.68rem; }
+
+.help-card { text-align: left; max-width: 400px; }
+.help-card h2 { margin-bottom: 4px; }
+.help-target {
+  color: var(--blue); font-size: 0.9rem; font-weight: 600; margin-bottom: 18px;
+}
+.help-steps { margin: 0 0 18px 0; padding-left: 20px; }
+.help-steps li {
+  color: var(--text); font-size: 0.93rem; line-height: 1.5; margin-bottom: 10px;
+  padding-left: 4px;
+}
+.help-steps li::marker { color: var(--dimmer); font-weight: 700; }
+.help-watch {
+  color: var(--dim); font-size: 0.88rem; line-height: 1.5;
+  background: rgba(245,158,11,0.08); border-left: 2px solid var(--amber);
+  padding: 12px 14px; border-radius: 0 8px 8px 0; margin-bottom: 20px;
+}
+.help-watch strong { color: var(--amber); font-weight: 650; }
+#helpVideo {
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none; text-transform: none; letter-spacing: 0;
+  font-size: 0.92rem;
+}

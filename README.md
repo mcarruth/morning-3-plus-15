@@ -86,6 +86,20 @@ and today not being done yet does not break it. A deliberate skip does.
 - **A deploy appears on the second launch.** The service worker is cache-first
   so the app opens instantly offline, and refreshes its cache in the background.
 
+## Exercise help
+
+Tapping any exercise name, on the home screen or mid-workout, opens numbered
+instructions and a "watch for" note covering the most common way that movement
+goes wrong. All sixteen exercises are covered, and the text is bundled so it
+works offline like everything else.
+
+The "Watch on YouTube" button opens a *search* for the movement rather than a
+specific video. No invented URLs, and nothing to rot. It is the one thing in the
+app that needs a connection.
+
+Opening help during a session does not pause anything. The timer runs off
+timestamps and does not care what is on screen.
+
 ## Decisions that deviate from the spec
 
 - **Home shows today's exercises inline** rather than behind a preview screen.

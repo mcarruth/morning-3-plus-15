@@ -1,4 +1,4 @@
-import { WORKOUTS, exercise, targetLabel, isStrength } from './data.js';
+import { WORKOUTS, exercise, targetLabel, isStrength, videoSearchUrl } from './data.js';
 import * as store from './store.js';
 import { createTimer } from './timer.js';
 import {
@@ -143,8 +143,18 @@ function renderRow(result, onChange, opts = {}) {
   if (!opts.hideHead) {
     const head = document.createElement('div');
     head.className = 'row-head';
-    head.innerHTML = `<span class="row-name">${ex.name}</span>
-                      <span class="row-target">${targetLabel(ex)}</span>`;
+
+    const nameBtn = document.createElement('button');
+    nameBtn.type = 'button';
+    nameBtn.className = 'row-name name-btn';
+    nameBtn.textContent = ex.name;
+    nameBtn.onclick = () => openHelp(ex.id);
+
+    const target = document.createElement('span');
+    target.className = 'row-target';
+    target.textContent = targetLabel(ex);
+
+    head.append(nameBtn, target);
     row.appendChild(head);
   }
 
@@ -156,6 +166,28 @@ function renderRow(result, onChange, opts = {}) {
   }
   row.appendChild(fields);
   return row;
+}
+
+/* ---------------- exercise help ---------------- */
+
+function openHelp(exerciseId) {
+  const ex = exercise(exerciseId);
+  if (!ex) return;
+
+  $('helpName').textContent = ex.name;
+  $('helpTarget').textContent = targetLabel(ex);
+
+  const steps = $('helpSteps');
+  steps.innerHTML = '';
+  (ex.instructions || []).forEach(text => {
+    const li = document.createElement('li');
+    li.textContent = text;
+    steps.appendChild(li);
+  });
+
+  $('helpWatch').textContent = ex.watchFor || '';
+  $('helpVideo').href = videoSearchUrl(ex);
+  overlay('ovHelp', true);
 }
 
 /* ---------------- home ---------------- */
@@ -319,6 +351,7 @@ function paintTimer(state) {
     paintedInterval = state.intervalIndex;
     const ex = exercise(workout.intervals[state.indexInRound]);
     $('nowName').textContent = ex.name;
+    $('nowName').onclick = () => openHelp(ex.id);
     $('nowTarget').textContent = targetLabel(ex);
     $('nowCue').textContent = ex.cue;
 
@@ -549,6 +582,8 @@ $('copyDataBtn').onclick = async () => {
   overlay('ovExport', true);
 };
 $('exportClose').onclick = () => overlay('ovExport', false);
+$('helpClose').onclick = () => overlay('ovHelp', false);
+$('ovHelp').onclick = e => { if (e.target === $('ovHelp')) overlay('ovHelp', false); };
 
 /* ---------------- boot ---------------- */
 
