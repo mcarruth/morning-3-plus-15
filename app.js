@@ -43,9 +43,30 @@ function beep(freq, ms, gain = 0.25) {
   } catch (e) { /* never let a missing cue break the workout */ }
 }
 
+// A restored session has had no user gesture, so the audio context cannot
+// exist yet and every cue would silently no-op. Arm the next tap to fix it.
+function armAudioUnlock() {
+  const handler = () => {
+    unlockAudio();
+    updateAudioHint();
+    document.removeEventListener('pointerdown', handler);
+  };
+  document.addEventListener('pointerdown', handler);
+}
+
+function audioReady() {
+  return !store.settings().soundEnabled || (audioCtx && audioCtx.state === 'running');
+}
+
+function updateAudioHint() {
+  const hint = $('audioHint');
+  if (!hint) return;
+  hint.textContent = (timer && !audioReady()) ? 'Tap anywhere to turn sound back on' : '';
+}
+
 function cue(kind) {
   if (kind === 'start' || kind === 'interval') { beep(880, 220, 0.3); }
-  else if (kind === 'final-ten') { beep(560, 90, 0.16); }
+  else if (kind === 'countdown-tick') { beep(660, 80, 0.18); }
   else if (kind === 'complete') {
     beep(523, 160); setTimeout(() => beep(659, 160), 170); setTimeout(() => beep(784, 340), 340);
   }
@@ -301,8 +322,10 @@ function restoreActive() {
     onComplete: finishSession
   });
   acquireWakeLock();
+  armAudioUnlock();
   show('timer');
   timer.resumeFrom(saved.timer);
+  updateAudioHint();
   return true;
 }
 
@@ -334,6 +357,7 @@ function paintTimer(state) {
   }
 
   $('pausedFlag').textContent = state.paused ? 'Paused' : '';
+  updateAudioHint();
   $('pauseBtn').textContent = state.paused ? 'Resume' : 'Pause';
 
   // round dots

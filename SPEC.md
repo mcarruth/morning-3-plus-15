@@ -433,7 +433,8 @@ The central feature.
 
 - 15 minutes, 5 rounds, three one-minute intervals per round.
 - Three-second countdown before the first interval.
-- Audio signal at start, each new minute, the final ten seconds, and completion.
+- Audio signal at start, each new minute, and completion.
+- A tick every second over the final five seconds of each minute.
 - Next exercise shown before the current minute ends.
 - Pause, resume, previous interval, next interval.
 - Screen kept awake for the duration.
@@ -468,7 +469,8 @@ These are facts about Safari on iPhone, not preferences:
   is the deal.
 - **Audio needs a gesture.** The AudioContext is created and resumed inside the
   Start button's click handler. Created any later, it starts suspended and the
-  first cue is silent.
+  first cue is silent. A session restored after a reload has had no gesture, so
+  the next tap anywhere re-arms sound and the timer says so on screen.
 
 ---
 

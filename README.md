@@ -79,7 +79,11 @@ and today not being done yet does not break it. A deliberate skip does.
   instead, so the phone stays awake and unlocked for the fifteen minutes.
 - **Audio is unlocked on the Start tap.** The AudioContext is created inside
   that click handler. Built any later it starts suspended and the first cue is
-  silent.
+  silent. If iOS reloads the page mid-session, the restored timer has had no
+  gesture and cannot make sound, so it shows "Tap anywhere to turn sound back
+  on" and the next tap fixes it.
+- **Cues:** one beep at the top of each minute, then a tick every second over
+  the last five seconds.
 - **Storage is the only copy.** `Copy my data` at the bottom of History puts the
   full JSON on the clipboard. There is no file download, because an installed
   iOS PWA cannot reliably trigger one.

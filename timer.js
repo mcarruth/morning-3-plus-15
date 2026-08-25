@@ -7,6 +7,8 @@
 
 export const INTERVAL_MS = 60000;
 export const COUNTDOWN_MS = 3000;
+// Seconds remaining at which the per-second countdown ticks begin.
+export const CUE_FROM_SECONDS = 5;
 
 export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComplete }) {
   const totalIntervals = rounds * intervalsPerRound;
@@ -17,7 +19,7 @@ export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComple
   let pausedAt = null;
   let ticker = null;
   let lastInterval = -1;
-  let lastTenSecondCue = -1;
+  let lastCountdownSecond = -1;
   let finished = false;
 
   function elapsed(now = Date.now()) {
@@ -73,13 +75,15 @@ export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComple
     if (state.phase === 'running') {
       if (state.intervalIndex !== lastInterval) {
         lastInterval = state.intervalIndex;
-        lastTenSecondCue = -1;
+        lastCountdownSecond = -1;
         onCue && onCue('interval', state);
       }
+      // One tick per second over the last few seconds. Ticking on each distinct
+      // second rather than once on entering the window.
       const secsLeft = Math.ceil(state.msLeft / 1000);
-      if (secsLeft <= 10 && secsLeft > 0 && lastTenSecondCue !== state.intervalIndex) {
-        lastTenSecondCue = state.intervalIndex;
-        onCue && onCue('final-ten', state);
+      if (secsLeft <= CUE_FROM_SECONDS && secsLeft > 0 && secsLeft !== lastCountdownSecond) {
+        lastCountdownSecond = secsLeft;
+        onCue && onCue('countdown-tick', state, secsLeft);
       }
     }
 
@@ -108,7 +112,7 @@ export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComple
       pausedAt = null;
       finished = false;
       lastInterval = -1;
-      lastTenSecondCue = -1;
+      lastCountdownSecond = -1;
       onCue && onCue('start', read());
       run();
     },
@@ -121,7 +125,7 @@ export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComple
       finished = false;
       // Do not replay cues for intervals that already elapsed while away.
       lastInterval = read().intervalIndex;
-      lastTenSecondCue = lastInterval;
+      lastCountdownSecond = -1;
       run();
     },
 
@@ -150,7 +154,7 @@ export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComple
       startedAt = base - pausedTotal - target * INTERVAL_MS;
       finished = false;
       lastInterval = target;
-      lastTenSecondCue = -1;
+      lastCountdownSecond = -1;
       tick();
     },
 
