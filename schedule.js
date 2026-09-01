@@ -49,6 +49,16 @@ export function nextStrengthWorkout(last) {
   return 'A'; // covers 'C' and the first session ever
 }
 
+// The last completed session that was actual training. Recovery is a rest day
+// and must not flip the kettlebell/bodyweight alternation, in the same way it
+// does not advance A -> B -> C.
+export function lastCompletedTraining(sessions) {
+  const training = completed(sessions)
+    .filter(s => s.workoutType !== 'RECOVERY')
+    .sort(byDateAsc);
+  return training.length ? training[training.length - 1].workoutType : null;
+}
+
 // What the app proposes today. The calendar only gets to suggest Recovery on
 // the configured rest day; the rotation itself is driven by history.
 export function todaysWorkout(sessions, settings, date = localDate()) {
@@ -58,7 +68,15 @@ export function todaysWorkout(sessions, settings, date = localDate()) {
   if (doneToday.length) return doneToday[doneToday.length - 1].workoutType;
 
   if (weekdayOf(date) === settings.recoveryWeekday) return 'RECOVERY';
-  return nextStrengthWorkout(lastCompletedStrength(sessions));
+
+  // Kettlebell and bodyweight alternate, driven by the last completed training
+  // day rather than the calendar, so a skipped day cannot desync the pattern.
+  // Bodyweight is invisible to the rotation, so a full A -> B -> C cycle now
+  // takes six training days.
+  const last = lastCompletedTraining(sessions);
+  if (last === null) return nextStrengthWorkout(null); // first session ever
+  if (last === 'D') return nextStrengthWorkout(lastCompletedStrength(sessions));
+  return 'D';
 }
 
 // Consecutive days ending yesterday where each day either has a completed
@@ -123,6 +141,17 @@ export function lastResultsFor(sessions, workoutType) {
   return map;
 }
 
+// null means the row shows no weight field at all. Recovery never progresses,
+// so nothing in it is weighted. Loadable bodyweight movements start at zero
+// added load rather than the kettlebell default, because the number means
+// weight hung off a belt rather than the weight of the bell.
+function startingWeight(ex, prev, workoutType, settings) {
+  if (workoutType === 'RECOVERY') return null;
+  if (ex.loadable) return prev.weightLb != null ? prev.weightLb : 0;
+  if (ex.equipment === 'bodyweight') return null;
+  return prev.weightLb != null ? prev.weightLb : settings.defaultWeightLb;
+}
+
 // Build the editable rows for a workout, prefilled from history and falling
 // back to the bottom of the prescribed range.
 export function buildResults(sessions, workoutType, settings, deload = false) {
@@ -132,16 +161,12 @@ export function buildResults(sessions, workoutType, settings, deload = false) {
   return workout.intervals.map(id => {
     const ex = exercise(id);
     const prev = prior[id] || {};
-    // Recovery never progresses, so it carries no weight field either.
-    const bodyweight = ex.equipment === 'bodyweight' || workoutType === 'RECOVERY';
     return {
       exerciseId: id,
       targetType: ex.targetType,
       target: ex.targetMin,
       actual: prev.actual != null ? prev.actual : ex.targetMin,
-      weightLb: bodyweight
-        ? null
-        : (prev.weightLb != null ? prev.weightLb : settings.defaultWeightLb),
+      weightLb: startingWeight(ex, prev, workoutType, settings),
       substitutionUsed: null
     };
   });

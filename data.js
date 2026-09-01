@@ -318,6 +318,69 @@ export const EXERCISES = {
     ],
     watchFor: "Rushing. This is recovery work, so keep it relaxed and unhurried.",
     cue: 'Easy pace, tall posture'
+  },
+  pullup: {
+    id: 'pullup',
+    name: 'Pull-up',
+    short: 'Pull-up',
+    equipment: 'bodyweight',
+    loadable: true,
+    primaryMuscles: ['back', 'arms'],
+    secondaryMuscles: ['core', 'grip'],
+    targetType: 'repetitions',
+    targetMin: 5,
+    targetMax: 7,
+    perSide: false,
+    instructions: [
+      "Hang from the bar with your hands a little wider than your shoulders, palms facing away.",
+      "Pull your shoulder blades down and back before your arms do anything.",
+      "Pull until your chin clears the bar, leading with your chest rather than your chin.",
+      "Lower all the way to straight arms under control."
+    ],
+    watchFor: "Cutting the bottom short. A half rep from a bent-arm hang is not a rep. Straight arms every time.",
+    cue: 'Shoulders down first, chest to the bar'
+  },
+  pushup: {
+    id: 'pushup',
+    name: 'Push-up',
+    short: 'Push-up',
+    equipment: 'bodyweight',
+    loadable: true,
+    primaryMuscles: ['chest', 'arms'],
+    secondaryMuscles: ['shoulders', 'core'],
+    targetType: 'repetitions',
+    targetMin: 10,
+    targetMax: 14,
+    perSide: false,
+    instructions: [
+      "High plank, hands under your shoulders, body in one line from heels to head.",
+      "Lower until your chest is a fist off the floor, elbows tracking back at about 45 degrees.",
+      "Press back up and finish with your elbows straight.",
+      "Squeeze your glutes the whole time to keep the line."
+    ],
+    watchFor: "Hips sagging or piking, and elbows flaring straight out to the sides. Move as one plank.",
+    cue: 'One straight line, elbows back'
+  },
+  dip: {
+    id: 'dip',
+    name: 'Dip',
+    short: 'Dip',
+    equipment: 'bodyweight',
+    loadable: true,
+    primaryMuscles: ['chest', 'arms'],
+    secondaryMuscles: ['shoulders'],
+    targetType: 'repetitions',
+    targetMin: 5,
+    targetMax: 8,
+    perSide: false,
+    instructions: [
+      "Support yourself on the parallel bars with straight arms and your shoulders pushed down away from your ears.",
+      "Lean your torso forward slightly and bend your knees to keep your feet clear.",
+      "Lower until your upper arms are about parallel to the floor.",
+      "Press back to straight arms."
+    ],
+    watchFor: "Going deeper than parallel, which puts the shoulder in a bad spot for no extra benefit. Stop at parallel.",
+    cue: 'Shoulders down, stop at parallel'
   }
 };
 
@@ -343,6 +406,13 @@ export const WORKOUTS = {
     rounds: 5,
     intervals: ['reverseLunge', 'cleanPress', 'suitcase']
   },
+  D: {
+    id: 'D',
+    name: 'Bodyweight',
+    emphasis: 'Pull + push',
+    rounds: 5,
+    intervals: ['pullup', 'pushup', 'dip']
+  },
   RECOVERY: {
     id: 'RECOVERY',
     name: 'Recovery',
@@ -352,6 +422,8 @@ export const WORKOUTS = {
   }
 };
 
+// D and RECOVERY are deliberately absent: both must stay invisible to the
+// A -> B -> C rotation, which is driven by the last completed strength day.
 export const STRENGTH_TYPES = ['A', 'B', 'C'];
 
 export function isStrength(type) {

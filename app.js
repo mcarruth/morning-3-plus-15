@@ -143,7 +143,8 @@ function makeStepper(result, field, onChange, secondary) {
       const unit = ex.targetType === 'seconds' ? 'sec' : (ex.perSide ? 'per side' : 'reps');
       val.innerHTML = `${result.actual ?? 0}<small>${unit}</small>`;
     } else {
-      val.innerHTML = `${result.weightLb ?? 0}<small>lb</small>`;
+      const lb = result.weightLb ?? 0;
+      val.innerHTML = `${ex.loadable ? '+' : ''}${lb}<small>lb</small>`;
     }
   };
 
@@ -540,7 +541,7 @@ $('skipBtn').onclick = () => {
 $('changeBtn').onclick = () => {
   const box = $('changeOptions');
   box.innerHTML = '';
-  ['A', 'B', 'C', 'RECOVERY'].forEach(type => {
+  ['A', 'B', 'C', 'D', 'RECOVERY'].forEach(type => {
     const b = document.createElement('button');
     b.className = 'btn';
     b.textContent = `${WORKOUTS[type].name} · ${WORKOUTS[type].emphasis}`;

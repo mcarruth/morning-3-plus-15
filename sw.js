@@ -1,5 +1,5 @@
 // Offline support. A basement gym with no signal must not break the workout.
-const CACHE = 'morning315-v4';
+const CACHE = 'morning315-v5';
 
 const ASSETS = [
   '/', '/index.html', '/styles.css',

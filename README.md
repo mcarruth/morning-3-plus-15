@@ -1,7 +1,8 @@
 # Morning 3 + 15
 
-Daily kettlebell EMOM timer. Opens straight to today's workout, runs fifteen
-minutes, logs what you did, and picks tomorrow's session for you.
+Daily EMOM timer, alternating kettlebell and bodyweight days. Opens straight to
+today's workout, runs fifteen minutes, logs what you did, and picks tomorrow's
+session for you.
 
 The three-mile run is tracked on a Garmin. This app covers the fifteen minutes.
 
@@ -57,11 +58,46 @@ Both total fifteen minutes.
 
 ## Rotation
 
-`A -> B -> C -> A`, driven by the last completed **strength** session, which is
-derived from history rather than stored so it cannot drift out of sync.
+Kettlebell and bodyweight days alternate. Within the kettlebell days the
+rotation is `A -> B -> C -> A`, driven by the last completed **strength**
+session, which is derived from history rather than stored so it cannot drift
+out of sync.
 
-Recovery and skipped days are invisible to the rotation. Finish B on Friday,
-skip Saturday, do Recovery on Sunday, and Monday is still C.
+```
+Mon  A
+Tue  Bodyweight
+Wed  B
+Thu  Bodyweight
+Fri  C
+Sat  Bodyweight
+Sun  Recovery
+```
+
+Bodyweight is invisible to the rotation in exactly the way Recovery is, so a
+full `A -> B -> C` cycle now takes six training days rather than three. With one
+rest day a week that happens to land on a clean seven-day repeat, so an
+uninterrupted week looks the same every time. Nothing in the code depends on
+that. It falls out of the history, and a skipped day just shifts everything
+along by one.
+
+The alternation is derived from the last completed session that was not
+Recovery, so it follows history rather than the calendar. Recovery and skipped
+days disturb neither the rotation nor the alternation. Finish B on Friday, skip
+Saturday, do Recovery on Sunday, and Monday is bodyweight with C still queued
+behind it.
+
+## Added weight
+
+Pull-ups, push-ups and dips carry an added-load field on top of the reps. It
+starts at zero, steps in fives, and displays as `+15 lb` so it is never read as
+the weight of a bell. Belt for pull-ups and dips, vest or plate for push-ups.
+
+The field is driven by a `loadable` flag on the exercise rather than by
+equipment type, because plank drags and dead bugs are bodyweight too and should
+never ask for a number. Recovery is unweighted regardless.
+
+Like the kettlebell weights, the number prefills from your last session of the
+same workout, so it only has to be set when it changes.
 
 ## Streak
 
@@ -94,7 +130,7 @@ and today not being done yet does not break it. A deliberate skip does.
 
 Tapping any exercise name, on the home screen or mid-workout, opens numbered
 instructions and a "watch for" note covering the most common way that movement
-goes wrong. All sixteen exercises are covered, and the text is bundled so it
+goes wrong. All nineteen exercises are covered, and the text is bundled so it
 works offline like everything else.
 
 The "Watch on YouTube" button opens a *search* for the movement rather than a
