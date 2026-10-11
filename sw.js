@@ -1,10 +1,10 @@
 // Offline support. A basement gym with no signal must not break the workout.
-const CACHE = 'morning315-v5';
+const CACHE = 'morning315-v6';
 
 const ASSETS = [
   '/', '/index.html', '/styles.css',
   '/app.js', '/data.js', '/store.js', '/schedule.js', '/timer.js',
-  '/manifest.json', '/icon-192.svg'
+  '/manifest.json', '/icon-192.svg', '/icon-180.png', '/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
