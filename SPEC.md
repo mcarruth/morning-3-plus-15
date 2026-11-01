@@ -242,14 +242,16 @@ Substitution: standing clean and press becomes half-kneeling one-arm press.
 | Slot | Exercise | Target |
 |---|---|---:|
 | 1 | Pull-up | 5-7 reps |
-| 2 | Push-up | 12-16 reps |
-| 3 | Jump squat | 10-15 reps |
-| 4 | Chin-up | 5-7 reps |
-| 5 | Hollow body hold | 40 sec |
+| 2 | Dip | 5-8 reps |
+| 3 | Chin-up | 5-7 reps |
+| 4 | Jump squat | 10-15 reps |
+| 5 | Hanging leg raise | 6-10 reps |
 
 Bodyweight comes round three times per A/B/C cycle, so it carries two pulls to
-one push. Dips stay in the exercise library for history but are out of the
-rotation.
+one push. The three hanging movements alternate with the dip and jump squat so
+grip recovers between them. There are no planks or core holds here because a
+separate plank app covers those. Push-ups stay in the exercise library for
+history but are out of the rotation; the floor press covers that pattern.
 
 ### Recovery
 

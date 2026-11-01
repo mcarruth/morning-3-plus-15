@@ -544,24 +544,26 @@ export const EXERCISES = {
     watchFor: "Landing stiff-legged or with knees caving in. Land quietly. If your knees complain, do bodyweight squats instead.",
     cue: 'Land soft and quiet'
   },
-  hollowHold: {
-    id: 'hollowHold',
-    name: 'Hollow body hold',
-    short: 'Hollow hold',
+  hangingLegRaise: {
+    id: 'hangingLegRaise',
+    name: 'Hanging leg raise',
+    short: 'Leg raise',
     equipment: 'bodyweight',
     primaryMuscles: ['core'],
-    secondaryMuscles: [],
-    targetType: 'seconds',
-    targetMin: 40,
+    secondaryMuscles: ['grip', 'hip flexors'],
+    targetType: 'repetitions',
+    targetMin: 6,
+    targetMax: 10,
     perSide: false,
     instructions: [
-      "Lie on your back and press your low back flat into the floor.",
-      "Lift your shoulders and legs a few inches, arms reaching past your ears.",
-      "Hold the shape like a shallow banana, breathing steadily.",
-      "Bend your knees or bring your arms to your sides to make it easier."
+      "Hang from the bar with straight arms, shoulders pulled down away from your ears.",
+      "Brace your abs and tilt your pelvis back slightly before you lift.",
+      "Raise your legs as high as you can control, aiming for parallel or higher, without swinging.",
+      "Lower slowly to a dead hang before the next rep. Bend your knees to make it easier."
     ],
-    watchFor: "Your low back peeling off the floor. The moment it lifts, shorten the lever by tucking your knees.",
-    cue: 'Low back glued down'
+    watchFor: "Swinging and using momentum. If your body rocks, pause at the bottom until it settles, or switch to bent-knee raises.",
+    cue: 'Curl the pelvis, no swing'
+
   }
 };
 
@@ -598,8 +600,10 @@ export const WORKOUTS = {
     rounds: 3,
     workSeconds: 40,
     // Two pulls to one push: bodyweight comes round three times a cycle, so
-    // this is where the week's push/pull balance is set.
-    intervals: ['pullup', 'pushup', 'jumpSquat', 'chinup', 'hollowHold']
+    // this is where the week's push/pull balance is set. The three hanging
+    // movements are split up so grip gets a break between them. No planks or
+    // holds: those are covered by a separate plank app.
+    intervals: ['pullup', 'dip', 'chinup', 'jumpSquat', 'hangingLegRaise']
   },
   RECOVERY: {
     id: 'RECOVERY',
