@@ -133,7 +133,7 @@ and today not being done yet does not break it. A deliberate skip does.
 
 Tapping any exercise name, on the home screen or mid-workout, opens numbered
 instructions and a "watch for" note covering the most common way that movement
-goes wrong. All twenty-eight exercises are covered, and the text is bundled so it
+goes wrong. All thirty exercises are covered, and the text is bundled so it
 works offline like everything else.
 
 The "Watch on YouTube" button opens a *search* for the movement rather than a

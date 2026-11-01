@@ -196,8 +196,9 @@ looks like, not a set to finish early. One-sided movements switch at a beep
 halfway through the work. The 20-second rest is for logging the movement just
 done and setting up the next one, which the screen shows.
 
-Every kettlebell day mixes hinge, squat or lunge, push, pull and a carry or
-core hold, so a missed day never leaves a whole movement pattern out. Across
+Every kettlebell day mixes hinge, squat or lunge, push and pull, so a missed
+day never leaves a whole movement pattern out. Planks and core holds are left
+out on purpose: a separate plank app covers them. Across
 one A/B/C cycle (which includes three Bodyweight days) pulling outnumbers
 pushing, which is deliberate.
 
@@ -221,7 +222,7 @@ The press sits between the grip-heavy movements so grip is not the limiter.
 | 2 | Double-kettlebell floor press | 8-12 reps |
 | 3 | Goblet lateral lunge | 8-10 reps, alternating |
 | 4 | Kettlebell pullover | 10-12 reps |
-| 5 | Plank with alternating kettlebell drag | 40 sec |
+| 5 | Double kettlebell deadlift | 10-12 reps |
 
 Substitution: double front squat becomes single-bell goblet squat.
 
@@ -233,7 +234,7 @@ Substitution: double front squat becomes single-bell goblet squat.
 | 2 | One-arm clean and press | 4-6 reps per side |
 | 3 | Single-arm row | 6-8 reps per side |
 | 4 | One-arm snatch | 5-7 reps per side |
-| 5 | Suitcase hold | 20 sec per side |
+| 5 | Single-arm floor press | 6-8 reps per side |
 
 Substitution: standing clean and press becomes half-kneeling one-arm press.
 
@@ -249,8 +250,7 @@ Substitution: standing clean and press becomes half-kneeling one-arm press.
 
 Bodyweight comes round three times per A/B/C cycle, so it carries two pulls to
 one push. The three hanging movements alternate with the dip and jump squat so
-grip recovers between them. There are no planks or core holds here because a
-separate plank app covers those. Push-ups stay in the exercise library for
+grip recovers between them. Push-ups stay in the exercise library for
 history but are out of the rotation; the floor press covers that pattern.
 
 ### Recovery

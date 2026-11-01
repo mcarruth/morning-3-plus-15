@@ -544,6 +544,46 @@ export const EXERCISES = {
     watchFor: "Landing stiff-legged or with knees caving in. Land quietly. If your knees complain, do bodyweight squats instead.",
     cue: 'Land soft and quiet'
   },
+  deadlift: {
+    id: 'deadlift',
+    name: 'Double kettlebell deadlift',
+    short: 'Deadlift',
+    equipment: 'two-kettlebells',
+    primaryMuscles: ['glutes', 'hamstrings', 'back'],
+    secondaryMuscles: ['grip'],
+    targetType: 'repetitions',
+    targetMin: 10,
+    targetMax: 12,
+    perSide: false,
+    instructions: [
+      "Stand between the bells, handles lined up with the middle of your feet.",
+      "Push your hips back, soft knees, flat back, and grip both handles.",
+      "Pull the slack out, then stand up by driving the floor away and squeezing your glutes at the top.",
+      "Hinge to lower the bells back to the floor under control."
+    ],
+    watchFor: "Rounding your back to reach the bells, or turning it into a squat. Hips back first, and keep the bells close to your legs.",
+    cue: 'Hips back, push the floor away'
+  },
+  singleFloorPress: {
+    id: 'singleFloorPress',
+    name: 'Single-arm floor press',
+    short: 'One-arm floor press',
+    equipment: 'one-kettlebell',
+    primaryMuscles: ['chest', 'arms'],
+    secondaryMuscles: ['shoulders'],
+    targetType: 'repetitions',
+    targetMin: 6,
+    targetMax: 8,
+    perSide: true,
+    instructions: [
+      "Lie on your back, knees bent. Roll to one side, grip the bell, and roll back with it on your chest.",
+      "Press it straight up until your elbow locks, wrist stacked over elbow.",
+      "Lower until your triceps touch the floor, pause, and press again.",
+      "Switch arms at the halfway beep: roll to the side to hand it over safely."
+    ],
+    watchFor: "The bell drifting toward your face or your body rolling toward the bell. Keep it over your shoulder and both shoulder blades on the floor.",
+    cue: 'Stack the wrist, pause at the floor'
+  },
   hangingLegRaise: {
     id: 'hangingLegRaise',
     name: 'Hanging leg raise',
@@ -583,7 +623,7 @@ export const WORKOUTS = {
     emphasis: 'Squat + push',
     rounds: 3,
     workSeconds: 40,
-    intervals: ['frontSquat', 'floorPress', 'lateralLunge', 'pullover', 'plankDrag']
+    intervals: ['frontSquat', 'floorPress', 'lateralLunge', 'pullover', 'deadlift']
   },
   C: {
     id: 'C',
@@ -591,7 +631,7 @@ export const WORKOUTS = {
     emphasis: 'Unilateral + shoulders',
     rounds: 3,
     workSeconds: 40,
-    intervals: ['reverseLunge', 'cleanPress', 'singleRow', 'snatch', 'suitcase']
+    intervals: ['reverseLunge', 'cleanPress', 'singleRow', 'snatch', 'singleFloorPress']
   },
   D: {
     id: 'D',
