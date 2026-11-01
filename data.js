@@ -61,8 +61,8 @@ export const EXERCISES = {
       "Stand tall or walk slowly, arms straight, shoulders pulled down and back.",
       "Hold for the full 40 seconds, then hinge to set them down rather than dropping them."
     ],
-    watchFor: "Shrugging or leaning back. Ribs down, tall spine, and keep breathing.",
-    cue: 'Tall spine, ribs down, breathe'
+    watchFor: "Shrugging or leaning back. Ribs down, tall spine, and keep breathing. Use your heaviest pair: this is the main trap builder in the plan, and traps grow from load.",
+    cue: 'Heaviest pair, shoulders down and back'
   },
   frontSquat: {
     id: 'frontSquat',
@@ -565,25 +565,25 @@ export const EXERCISES = {
     watchFor: "Rounding your back to reach the bells, or turning it into a squat. Hips back first, and keep the bells close to your legs.",
     cue: 'Hips back, push the floor away'
   },
-  singleFloorPress: {
-    id: 'singleFloorPress',
-    name: 'Single-arm floor press',
-    short: 'One-arm floor press',
+  highPull: {
+    id: 'highPull',
+    name: 'Kettlebell high pull',
+    short: 'High pull',
     equipment: 'one-kettlebell',
-    primaryMuscles: ['chest', 'arms'],
-    secondaryMuscles: ['shoulders'],
+    primaryMuscles: ['traps', 'shoulders'],
+    secondaryMuscles: ['glutes', 'hamstrings', 'grip'],
     targetType: 'repetitions',
-    targetMin: 6,
-    targetMax: 8,
-    perSide: true,
+    targetMin: 10,
+    targetMax: 12,
+    perSide: false,
     instructions: [
-      "Lie on your back, knees bent. Roll to one side, grip the bell, and roll back with it on your chest.",
-      "Press it straight up until your elbow locks, wrist stacked over elbow.",
-      "Lower until your triceps touch the floor, pause, and press again.",
-      "Switch arms at the halfway beep: roll to the side to hand it over safely."
+      "Feet wide, toes turned slightly out, one bell on the floor between your feet. Grip the handle with both hands.",
+      "Hinge, then stand up hard, snapping your hips forward so the bell starts moving.",
+      "Ride that drive straight into a pull: shrug, then lead with your elbows high and wide until the handle reaches upper chest height.",
+      "Lower under control back to the hinge and go again."
     ],
-    watchFor: "The bell drifting toward your face or your body rolling toward the bell. Keep it over your shoulder and both shoulder blades on the floor.",
-    cue: 'Stack the wrist, pause at the floor'
+    watchFor: "Pulling with only your arms. The hips start the bell moving, and the shrug and the elbows finish it. Stop the handle at upper-chest height, not at your chin.",
+    cue: 'Hips, shrug, elbows high'
   },
   hangingLegRaise: {
     id: 'hangingLegRaise',
@@ -633,7 +633,9 @@ export const WORKOUTS = {
     emphasis: 'Unilateral + shoulders',
     rounds: 3,
     workSeconds: 40,
-    intervals: ['reverseLunge', 'cleanPress', 'singleRow', 'snatch', 'singleFloorPress']
+    // High pull first while fresh; the lunge gives the shoulders a break
+    // before the press.
+    intervals: ['highPull', 'reverseLunge', 'cleanPress', 'singleRow', 'snatch']
   },
   D: {
     id: 'D',

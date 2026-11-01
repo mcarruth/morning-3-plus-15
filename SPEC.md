@@ -212,6 +212,9 @@ pushing, which is deliberate.
 | 4 | Single-leg Romanian deadlift | 5-6 reps per side |
 | 5 | Double farmer hold | 40 sec |
 
+The farmer hold uses the heaviest pair available: it is the main upper-trap
+load in the plan.
+
 The press sits between the grip-heavy movements so grip is not the limiter.
 
 ### Workout B: Squat and push
@@ -228,15 +231,18 @@ The row and the deadlift are kept apart so the low back gets a break.
 
 Substitution: double front squat becomes single-bell goblet squat.
 
-### Workout C: Unilateral and shoulder stability
+### Workout C: Unilateral and shoulders
 
 | Slot | Exercise | Target |
 |---|---|---:|
-| 1 | Goblet reverse lunge | 5-6 reps per side |
-| 2 | One-arm clean and press | 4-6 reps per side |
-| 3 | Single-arm row | 6-8 reps per side |
-| 4 | One-arm snatch | 5-7 reps per side |
-| 5 | Single-arm floor press | 6-8 reps per side |
+| 1 | Kettlebell high pull | 10-12 reps |
+| 2 | Goblet reverse lunge | 5-6 reps per side |
+| 3 | One-arm clean and press | 4-6 reps per side |
+| 4 | Single-arm row | 6-8 reps per side |
+| 5 | One-arm snatch | 5-7 reps per side |
+
+C carries the plan's shoulder and trap emphasis: high pull, overhead press and
+snatch. The lunge separates the high pull from the press.
 
 Substitution: standing clean and press becomes half-kneeling one-arm press.
 
