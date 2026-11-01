@@ -1,4 +1,4 @@
-import { WORKOUTS, exercise, targetLabel, isStrength, videoSearchUrl } from './data.js';
+import { WORKOUTS, exercise, targetLabel, isStrength, videoSearchUrl, switchesHalfway } from './data.js';
 import * as store from './store.js';
 import { createTimer } from './timer.js';
 import {
@@ -64,8 +64,15 @@ function updateAudioHint() {
   hint.textContent = (timer && !audioReady()) ? 'Tap anywhere to turn sound back on' : '';
 }
 
-function cue(kind) {
+function cue(kind, state) {
   if (kind === 'start' || kind === 'interval') { beep(880, 220, 0.3); }
+  else if (kind === 'rest') { beep(440, 260, 0.3); }
+  else if (kind === 'half') {
+    // Only one-sided work gets the switch cue. Two quick high beeps, so it
+    // cannot be mistaken for the start of rest.
+    const ex = session && exercise(WORKOUTS[session.workoutType].intervals[state.indexInRound]);
+    if (ex && switchesHalfway(ex)) { beep(988, 90, 0.25); setTimeout(() => beep(988, 90, 0.25), 140); }
+  }
   else if (kind === 'countdown-tick') { beep(660, 80, 0.18); }
   else if (kind === 'complete') {
     beep(523, 160); setTimeout(() => beep(659, 160), 170); setTimeout(() => beep(784, 340), 340);
@@ -274,6 +281,24 @@ function renderHome() {
 
 /* ---------------- running a session ---------------- */
 
+function makeTimer(rounds) {
+  const workout = WORKOUTS[session.workoutType];
+  return createTimer({
+    rounds,
+    intervalsPerRound: workout.intervals.length,
+    workMs: workout.workSeconds ? workout.workSeconds * 1000 : null,
+    onTick: paintTimer,
+    onCue: cue,
+    onComplete: finishSession
+  });
+}
+
+function updateScaleLabel() {
+  const workout = WORKOUTS[session.workoutType];
+  $('scaleBtn').textContent = session.roundsPlanned === workout.rounds
+    ? `Drop to ${workout.rounds - 1} rounds` : `Back to ${workout.rounds} rounds`;
+}
+
 function beginSession(type, results, roundsPlanned, deload) {
   const workout = WORKOUTS[type];
   session = {
@@ -289,13 +314,8 @@ function beginSession(type, results, roundsPlanned, deload) {
     results
   };
 
-  timer = createTimer({
-    rounds: session.roundsPlanned,
-    intervalsPerRound: workout.intervals.length,
-    onTick: paintTimer,
-    onCue: cue,
-    onComplete: finishSession
-  });
+  timer = makeTimer(session.roundsPlanned);
+  updateScaleLabel();
 
   unlockAudio();
   acquireWakeLock();
@@ -314,14 +334,8 @@ function restoreActive() {
   if (!saved || !saved.session) return false;
 
   session = saved.session;
-  const workout = WORKOUTS[session.workoutType];
-  timer = createTimer({
-    rounds: session.roundsPlanned,
-    intervalsPerRound: workout.intervals.length,
-    onTick: paintTimer,
-    onCue: cue,
-    onComplete: finishSession
-  });
+  timer = makeTimer(session.roundsPlanned);
+  updateScaleLabel();
   acquireWakeLock();
   armAudioUnlock();
   show('timer');
@@ -337,6 +351,11 @@ function currentResult(state) {
 }
 
 let paintedInterval = -1;
+let paintedSegment = null;
+
+function nextLabel(nx) {
+  return `${nx.short} · ${nx.targetMin}${nx.targetType === 'seconds' ? ' sec' : ''}`;
+}
 
 function paintTimer(state) {
   const workout = WORKOUTS[session.workoutType];
@@ -352,10 +371,17 @@ function paintTimer(state) {
     setRing(0, false);
   } else {
     $('clock').classList.remove('countdown');
-    const secs = Math.ceil(state.msLeft / 1000);
+    const secs = Math.ceil(state.segMsLeft / 1000);
     $('clock').textContent = `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')}`;
-    setRing(state.progress, secs <= 10);
+    const resting = state.segment === 'rest';
+    setRing(state.segProgress, !resting && secs <= (state.split ? 5 : 10), resting);
   }
+
+  // Work/Rest label only when the minute is split; Recovery is all work.
+  $('phaseLabel').textContent = state.phase === 'running' && state.split
+    ? (state.segment === 'rest' ? 'Rest' : 'Work') : '';
+  $('phaseLabel').classList.toggle('rest', state.segment === 'rest');
+  $('nowTarget').classList.toggle('rest', state.phase === 'running' && state.segment === 'rest');
 
   $('pausedFlag').textContent = state.paused ? 'Paused' : '';
   updateAudioHint();
@@ -371,21 +397,38 @@ function paintTimer(state) {
     d.className = 'dot' + (i + 1 < state.round ? ' done' : i + 1 === state.round ? ' current' : '');
   });
 
-  // exercise details only repaint on interval change
-  if (state.intervalIndex !== paintedInterval || paintedInterval === -1) {
+  // Exercise details only repaint when the interval or work/rest changes.
+  const segment = state.phase === 'running' ? state.segment : 'work';
+  if (state.intervalIndex !== paintedInterval || segment !== paintedSegment || paintedInterval === -1) {
     paintedInterval = state.intervalIndex;
+    paintedSegment = segment;
     const ex = exercise(workout.intervals[state.indexInRound]);
-    $('nowName').textContent = ex.name;
-    $('nowName').onclick = () => openHelp(ex.id);
-    $('nowTarget').textContent = targetLabel(ex);
-    $('nowCue').textContent = ex.cue;
-
     const nextIdx = state.intervalIndex + 1;
-    if (nextIdx < timer.totalIntervals) {
-      const nx = exercise(workout.intervals[nextIdx % workout.intervals.length]);
-      $('upNext').textContent = `Next: ${nx.short} · ${nx.targetMin}${nx.targetType === 'seconds' ? ' sec' : ''}`;
+    const nx = nextIdx < timer.totalIntervals
+      ? exercise(workout.intervals[nextIdx % workout.intervals.length]) : null;
+
+    if (segment === 'rest') {
+      // Rest is for setting up the next bell, so the next movement takes the
+      // headline. The row below still logs the one just finished.
+      if (nx) {
+        $('nowName').textContent = nx.name;
+        $('nowName').onclick = () => openHelp(nx.id);
+        $('nowTarget').textContent = 'Up next · ' + targetLabel(nx);
+        $('nowCue').textContent = nx.cue;
+      } else {
+        $('nowName').textContent = 'That is the last one';
+        $('nowName').onclick = null;
+        $('nowTarget').textContent = 'Done after this rest';
+        $('nowCue').textContent = '';
+      }
+      $('upNext').textContent = `Log ${ex.short} above`;
     } else {
-      $('upNext').textContent = 'Last interval';
+      $('nowName').textContent = ex.name;
+      $('nowName').onclick = () => openHelp(ex.id);
+      $('nowTarget').textContent = targetLabel(ex) +
+        (state.split && switchesHalfway(ex) ? ' · switch at the beep' : '');
+      $('nowCue').textContent = ex.cue;
+      $('upNext').textContent = nx ? 'Next: ' + nextLabel(nx) : 'Last interval';
     }
 
     const fields = $('timerFields');
@@ -401,11 +444,12 @@ function paintTimer(state) {
 }
 
 const RING_LEN = 2 * Math.PI * 46;
-function setRing(progress, warn) {
+function setRing(progress, warn, rest = false) {
   const fill = $('ringFill');
   fill.style.strokeDasharray = RING_LEN;
   fill.style.strokeDashoffset = RING_LEN * progress;
   $('ring').classList.toggle('warn', !!warn);
+  $('ring').classList.toggle('rest', !!rest);
 }
 
 function finishSession(state) {
@@ -426,6 +470,7 @@ function finishSession(state) {
   timer = null;
   session = null;
   paintedInterval = -1;
+  paintedSegment = null;
 }
 
 function endEarly() {
@@ -438,7 +483,7 @@ function endEarly() {
   store.addSession(session);
   store.clearActive();
   releaseWakeLock();
-  timer = null; session = null; paintedInterval = -1;
+  timer = null; session = null; paintedInterval = -1; paintedSegment = null;
   override = null;
   renderHome(); show('home');
 }
@@ -569,17 +614,13 @@ $('scaleBtn').onclick = () => {
   const target = session.roundsPlanned === workout.rounds ? workout.rounds - 1 : workout.rounds;
   const state = timer.read();
   session.roundsPlanned = target;
-  $('scaleBtn').textContent = target === workout.rounds
-    ? `Drop to ${workout.rounds - 1} rounds` : `Back to ${workout.rounds} rounds`;
+  updateScaleLabel();
 
   const spent = state.phase === 'countdown' ? 0 : state.intervalIndex;
   timer.stop();
-  timer = createTimer({
-    rounds: target, intervalsPerRound: workout.intervals.length,
-    onTick: paintTimer, onCue: cue, onComplete: finishSession
-  });
+  timer = makeTimer(target);
   timer.resumeFrom({ startedAt: Date.now() - spent * 60000, pausedTotal: 0, pausedAt: null });
-  paintedInterval = -1;
+  paintedInterval = -1; paintedSegment = null;
   persistActive();
 };
 

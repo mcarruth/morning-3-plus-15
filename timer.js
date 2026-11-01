@@ -3,22 +3,34 @@
 // Remaining time is always derived from timestamps and never decremented, so
 // nothing accumulates drift and a mid-workout refresh restores the exact
 // position. The engine is generalised over rounds and intervals-per-round
-// because Recovery is 3 rounds of 5 while strength work is 5 rounds of 3.
+// because Recovery is 3 rounds of 5 one-minute blocks.
+//
+// Each minute can optionally be split into work and rest (40/20 on training
+// days). Without a split the whole minute is work, which is what Recovery
+// uses. Either way the interval itself is always one minute, so skipping and
+// scaling still snap to minute boundaries.
 
 export const INTERVAL_MS = 60000;
 export const COUNTDOWN_MS = 3000;
-// Seconds remaining at which the per-second countdown ticks begin.
+// Seconds remaining in a segment at which the per-second ticks begin. Shorter
+// when the minute is split, so the ticks do not swallow the whole rest.
 export const CUE_FROM_SECONDS = 5;
+export const CUE_FROM_SECONDS_SPLIT = 3;
 
-export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComplete }) {
+export function createTimer({ rounds, intervalsPerRound, workMs = null, onTick, onCue, onComplete }) {
   const totalIntervals = rounds * intervalsPerRound;
   const totalMs = totalIntervals * INTERVAL_MS;
+  const split = workMs !== null && workMs > 0 && workMs < INTERVAL_MS;
+  const workLen = split ? workMs : INTERVAL_MS;
+  const cueFrom = split ? CUE_FROM_SECONDS_SPLIT : CUE_FROM_SECONDS;
 
   let startedAt = null;   // wall clock ms; sits in the future during countdown
   let pausedTotal = 0;
   let pausedAt = null;
   let ticker = null;
   let lastInterval = -1;
+  let lastSegment = null;
+  let lastHalf = -1;
   let lastCountdownSecond = -1;
   let finished = false;
 
@@ -39,6 +51,10 @@ export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComple
         round: 1,
         indexInRound: 0,
         msLeft: INTERVAL_MS,
+        segment: 'work',
+        segMsLeft: workLen,
+        segProgress: 0,
+        split,
         paused: pausedAt !== null,
         progress: 0
       };
@@ -51,6 +67,10 @@ export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComple
         round: rounds,
         indexInRound: intervalsPerRound - 1,
         msLeft: 0,
+        segment: split ? 'rest' : 'work',
+        segMsLeft: 0,
+        segProgress: 1,
+        split,
         paused: false,
         progress: 1
       };
@@ -58,15 +78,33 @@ export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComple
 
     const intervalIndex = Math.floor(e / INTERVAL_MS);
     const intoInterval = e % INTERVAL_MS;
+    const working = intoInterval < workLen;
     return {
       phase: 'running',
       intervalIndex,
       round: Math.floor(intervalIndex / intervalsPerRound) + 1,
       indexInRound: intervalIndex % intervalsPerRound,
       msLeft: INTERVAL_MS - intoInterval,
+      segment: working ? 'work' : 'rest',
+      segMsLeft: working ? workLen - intoInterval : INTERVAL_MS - intoInterval,
+      segProgress: working
+        ? intoInterval / workLen
+        : (intoInterval - workLen) / (INTERVAL_MS - workLen),
+      // True from the middle of the work segment onward, for "switch sides".
+      pastHalf: intoInterval >= workLen / 2,
+      split,
       paused: pausedAt !== null,
       progress: intoInterval / INTERVAL_MS
     };
+  }
+
+  // Mark the current position as already cued, so restoring or jumping does
+  // not replay cues for time that has already passed.
+  function settle(state) {
+    lastInterval = state.intervalIndex;
+    lastSegment = state.segment;
+    lastHalf = state.pastHalf ? state.intervalIndex : -1;
+    lastCountdownSecond = -1;
   }
 
   function tick() {
@@ -75,13 +113,23 @@ export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComple
     if (state.phase === 'running') {
       if (state.intervalIndex !== lastInterval) {
         lastInterval = state.intervalIndex;
+        lastSegment = state.segment;
         lastCountdownSecond = -1;
         onCue && onCue('interval', state);
+      } else if (state.segment !== lastSegment) {
+        lastSegment = state.segment;
+        lastCountdownSecond = -1;
+        onCue && onCue('rest', state);
       }
-      // One tick per second over the last few seconds. Ticking on each distinct
-      // second rather than once on entering the window.
-      const secsLeft = Math.ceil(state.msLeft / 1000);
-      if (secsLeft <= CUE_FROM_SECONDS && secsLeft > 0 && secsLeft !== lastCountdownSecond) {
+
+      if (state.segment === 'work' && state.pastHalf && lastHalf !== state.intervalIndex) {
+        lastHalf = state.intervalIndex;
+        onCue && onCue('half', state);
+      }
+
+      // One tick per second over the last few seconds of each segment.
+      const secsLeft = Math.ceil(state.segMsLeft / 1000);
+      if (secsLeft <= cueFrom && secsLeft > 0 && secsLeft !== lastCountdownSecond) {
         lastCountdownSecond = secsLeft;
         onCue && onCue('countdown-tick', state, secsLeft);
       }
@@ -105,6 +153,7 @@ export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComple
 
   return {
     totalIntervals,
+    split,
 
     start() {
       startedAt = Date.now() + COUNTDOWN_MS;
@@ -112,6 +161,8 @@ export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComple
       pausedAt = null;
       finished = false;
       lastInterval = -1;
+      lastSegment = null;
+      lastHalf = -1;
       lastCountdownSecond = -1;
       onCue && onCue('start', read());
       run();
@@ -123,9 +174,7 @@ export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComple
       pausedTotal = saved.pausedTotal || 0;
       pausedAt = saved.pausedAt || null;
       finished = false;
-      // Do not replay cues for intervals that already elapsed while away.
-      lastInterval = read().intervalIndex;
-      lastCountdownSecond = -1;
+      settle(read());
       run();
     },
 
@@ -153,8 +202,7 @@ export function createTimer({ rounds, intervalsPerRound, onTick, onCue, onComple
       const base = pausedAt !== null ? pausedAt : Date.now();
       startedAt = base - pausedTotal - target * INTERVAL_MS;
       finished = false;
-      lastInterval = target;
-      lastCountdownSecond = -1;
+      settle(read());
       tick();
     },
 

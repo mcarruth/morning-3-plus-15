@@ -1,8 +1,8 @@
 # Morning 3 + 15
 
-Daily EMOM timer, alternating kettlebell and bodyweight days. Opens straight to
-today's workout, runs fifteen minutes, logs what you did, and picks tomorrow's
-session for you.
+Daily 15-minute EMOM timer, 40 seconds on and 20 off, alternating kettlebell
+and bodyweight days. Opens straight to today's workout, runs fifteen minutes,
+logs what you did, and picks tomorrow's session for you.
 
 The three-mile run is tracked on a Garmin. This app covers the fifteen minutes.
 
@@ -52,9 +52,10 @@ runs, so a refresh or a browser suspension mid-workout restores the exact
 position. Skipping intervals snaps to a minute boundary rather than nudging by
 an offset, so repeated skips cannot leave the clock stranded mid-minute.
 
-The engine is generalised over rounds and intervals-per-round because Recovery
-is three rounds of five movements while strength work is five rounds of three.
-Both total fifteen minutes.
+Every workout is three rounds of five one-minute intervals. On training days
+each minute is split into 40 seconds of work and 20 of rest; the split is
+derived from the same elapsed time, so it cannot drift either. Recovery runs
+each minute unsplit.
 
 ## Rotation
 
@@ -88,7 +89,7 @@ behind it.
 
 ## Added weight
 
-Pull-ups, push-ups and dips carry an added-load field on top of the reps. It
+Pull-ups, chin-ups, push-ups and dips carry an added-load field on top of the reps. It
 starts at zero, steps in fives, and displays as `+15 lb` so it is never read as
 the weight of a bell. Belt for pull-ups and dips, vest or plate for push-ups.
 
@@ -118,8 +119,10 @@ and today not being done yet does not break it. A deliberate skip does.
   silent. If iOS reloads the page mid-session, the restored timer has had no
   gesture and cannot make sound, so it shows "Tap anywhere to turn sound back
   on" and the next tap fixes it.
-- **Cues:** one beep at the top of each minute, then a tick every second over
-  the last five seconds.
+- **Cues:** a high beep when work starts, a lower beep when rest starts, a
+  double beep halfway through work on one-sided movements (switch sides), and
+  a tick every second over the last three seconds of work and of rest.
+  Recovery keeps one beep a minute with ticks over the last five seconds.
 - **Storage is the only copy.** `Copy my data` at the bottom of History puts the
   full JSON on the clipboard. There is no file download, because an installed
   iOS PWA cannot reliably trigger one.
@@ -130,7 +133,7 @@ and today not being done yet does not break it. A deliberate skip does.
 
 Tapping any exercise name, on the home screen or mid-workout, opens numbered
 instructions and a "watch for" note covering the most common way that movement
-goes wrong. All nineteen exercises are covered, and the text is bundled so it
+goes wrong. All twenty-eight exercises are covered, and the text is bundled so it
 works offline like everything else.
 
 The "Watch on YouTube" button opens a *search* for the movement rather than a
@@ -151,7 +154,7 @@ timestamps and does not care what is on screen.
   round, which is the change actually wanted at that moment.
 - **Recovery carries no weight fields.** It never progresses, so logging load
   for it is noise.
-- **Results are per exercise, not per round.** Three numbers per session rather
+- **Results are per exercise, not per round.** Five numbers per session rather
   than fifteen.
 
 ## Phase 2

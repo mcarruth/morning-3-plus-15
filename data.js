@@ -1,5 +1,8 @@
 // Exercise library and workout definitions.
 // Every workout totals 15 minutes: rounds * intervals.length === 15.
+// Training days split each minute into 40 seconds of work and 20 of rest, so
+// rep targets are what a solid 40 seconds looks like, not a fixed set to
+// finish early. Per-side exercises switch at the halfway beep.
 
 export const EXERCISES = {
   swing: {
@@ -50,14 +53,13 @@ export const EXERCISES = {
     primaryMuscles: ['grip', 'core'],
     secondaryMuscles: ['shoulders', 'back'],
     targetType: 'seconds',
-    targetMin: 35,
-    targetMax: 45,
+    targetMin: 40,
     perSide: false,
     instructions: [
       "Bells on the floor either side of your feet.",
       "Hinge, grip both handles, and stand up by driving through your legs.",
       "Stand tall or walk slowly, arms straight, shoulders pulled down and back.",
-      "Hold for the time, then hinge to set them down rather than dropping them."
+      "Hold for the full 40 seconds, then hinge to set them down rather than dropping them."
     ],
     watchFor: "Shrugging or leaning back. Ribs down, tall spine, and keep breathing.",
     cue: 'Tall spine, ribs down, breathe'
@@ -70,8 +72,8 @@ export const EXERCISES = {
     primaryMuscles: ['quadriceps', 'glutes'],
     secondaryMuscles: ['core'],
     targetType: 'repetitions',
-    targetMin: 6,
-    targetMax: 8,
+    targetMin: 8,
+    targetMax: 10,
     perSide: false,
     instructions: [
       "Clean both bells to the rack: handles resting on the back of your wrists, bells against your forearms.",
@@ -131,8 +133,7 @@ export const EXERCISES = {
     primaryMuscles: ['core'],
     secondaryMuscles: ['shoulders'],
     targetType: 'seconds',
-    targetMin: 30,
-    targetMax: 40,
+    targetMin: 40,
     perSide: false,
     instructions: [
       "Set up in a high plank with a bell just outside one hand.",
@@ -151,14 +152,14 @@ export const EXERCISES = {
     primaryMuscles: ['quadriceps', 'glutes'],
     secondaryMuscles: ['core'],
     targetType: 'repetitions',
-    targetMin: 6,
-    targetMax: 8,
+    targetMin: 5,
+    targetMax: 6,
     perSide: true,
     instructions: [
       "Hold one bell at your chest in the goblet position.",
       "Step one foot back and lower until your back knee lightly touches the floor.",
       "Drive through your front heel to stand back up.",
-      "Complete all the reps on one side, then switch."
+      "Stay on one leg, then switch at the halfway beep."
     ],
     watchFor: "Taking a short step back, which dumps the load onto your front knee. Step back long.",
     cue: 'Step back long, knee kisses the floor'
@@ -171,14 +172,14 @@ export const EXERCISES = {
     primaryMuscles: ['shoulders', 'back'],
     secondaryMuscles: ['core', 'grip'],
     targetType: 'repetitions',
-    targetMin: 5,
-    targetMax: 8,
+    targetMin: 4,
+    targetMax: 6,
     perSide: true,
     instructions: [
       "Bell between your feet. Hinge and grip it with one hand.",
       "Pull it up close to your body and keep it there, so it arrives softly in the rack at your shoulder instead of flipping over and banging your wrist.",
       "From the rack, press straight overhead until your arm locks out beside your ear.",
-      "Lower to the rack, then back to the floor. All reps one side, then switch."
+      "Lower to the rack, then back to the floor. Switch arms at the halfway beep."
     ],
     watchFor: "The bell crashing onto your forearm. Keep it close and let your hand rotate around the handle rather than letting the bell swing over it.",
     cue: 'Tame the arc, lock out overhead',
@@ -213,13 +214,12 @@ export const EXERCISES = {
     secondaryMuscles: ['shoulders'],
     targetType: 'seconds',
     targetMin: 20,
-    targetMax: 30,
     perSide: true,
     instructions: [
       "One bell on the floor beside you. Hinge and grip it.",
       "Stand tall with the bell hanging at your side like a suitcase.",
       "Resist the sideways pull and stay perfectly square.",
-      "Hold for the time, then switch sides."
+      "Switch sides at the halfway beep."
     ],
     watchFor: "Leaning away from the bell to counterbalance. Not leaning is the entire exercise.",
     cue: 'Do not lean, stay square'
@@ -310,6 +310,7 @@ export const EXERCISES = {
     targetType: 'seconds',
     targetMin: 60,
     perSide: false,
+    switchHalfway: true,
     instructions: [
       "One bell in one hand, hanging at your side.",
       "Walk at an easy pace with a tall posture.",
@@ -349,8 +350,8 @@ export const EXERCISES = {
     primaryMuscles: ['chest', 'arms'],
     secondaryMuscles: ['shoulders', 'core'],
     targetType: 'repetitions',
-    targetMin: 10,
-    targetMax: 14,
+    targetMin: 12,
+    targetMax: 16,
     perSide: false,
     instructions: [
       "High plank, hands under your shoulders, body in one line from heels to head.",
@@ -381,6 +382,186 @@ export const EXERCISES = {
     ],
     watchFor: "Going deeper than parallel, which puts the shoulder in a bad spot for no extra benefit. Stop at parallel.",
     cue: 'Shoulders down, stop at parallel'
+  },
+  pushPress: {
+    id: 'pushPress',
+    name: 'Double push press',
+    short: 'Push press',
+    equipment: 'two-kettlebells',
+    primaryMuscles: ['shoulders', 'arms'],
+    secondaryMuscles: ['quadriceps', 'core'],
+    targetType: 'repetitions',
+    targetMin: 6,
+    targetMax: 8,
+    perSide: false,
+    instructions: [
+      "Clean both bells to the rack, elbows tucked against your ribs.",
+      "Dip a few inches by bending your knees, torso staying upright.",
+      "Drive up hard through your legs and use that pop to punch both bells overhead.",
+      "Lock out with your biceps by your ears, then lower back to the rack."
+    ],
+    watchFor: "Leaning back to finish the press. Squeeze your glutes and keep your ribs down so the bells finish over your shoulders, not behind them.",
+    cue: 'Dip, drive, punch the ceiling'
+  },
+  slRdl: {
+    id: 'slRdl',
+    name: 'Single-leg Romanian deadlift',
+    short: 'SL deadlift',
+    equipment: 'one-kettlebell',
+    primaryMuscles: ['hamstrings', 'glutes'],
+    secondaryMuscles: ['core', 'grip'],
+    targetType: 'repetitions',
+    targetMin: 5,
+    targetMax: 6,
+    perSide: true,
+    instructions: [
+      "Hold one bell in the hand opposite your standing leg.",
+      "Soft knee on the standing leg. Hinge forward as the free leg reaches straight back.",
+      "Lower until you feel a stretch in the back of the standing leg, hips square to the floor.",
+      "Drive the standing hip forward to stand tall. Switch legs at the halfway beep."
+    ],
+    watchFor: "Hips opening up toward the ceiling as the back leg rises. Point the back toes at the floor to keep them square.",
+    cue: 'Hips square, reach long'
+  },
+  lateralLunge: {
+    id: 'lateralLunge',
+    name: 'Goblet lateral lunge',
+    short: 'Lateral lunge',
+    equipment: 'one-kettlebell',
+    primaryMuscles: ['quadriceps', 'glutes'],
+    secondaryMuscles: ['adductors', 'core'],
+    targetType: 'repetitions',
+    targetMin: 8,
+    targetMax: 10,
+    perSide: false,
+    instructions: [
+      "Hold one bell at your chest in the goblet position, feet together.",
+      "Take a big step out to the side and sit back into that hip, the other leg straight.",
+      "Keep both feet flat and pointing forward.",
+      "Push back to the start and alternate sides. Count every rep."
+    ],
+    watchFor: "The working knee caving inward or the heel lifting. Sit back into the hip rather than down onto the knee.",
+    cue: 'Sit back into the hip'
+  },
+  pullover: {
+    id: 'pullover',
+    name: 'Kettlebell pullover',
+    short: 'Pullover',
+    equipment: 'one-kettlebell',
+    primaryMuscles: ['back', 'chest'],
+    secondaryMuscles: ['core'],
+    targetType: 'repetitions',
+    targetMin: 10,
+    targetMax: 12,
+    perSide: false,
+    instructions: [
+      "Lie on your back, knees bent, holding one bell by the horns over your chest.",
+      "Press your low back into the floor.",
+      "Arms almost straight, lower the bell slowly behind your head until it nearly touches the floor.",
+      "Pull it back over your chest using your lats."
+    ],
+    watchFor: "Your ribs flaring and low back arching as the bell goes overhead. Only go as far as your back stays flat.",
+    cue: 'Ribs down, pull with the lats'
+  },
+  singleRow: {
+    id: 'singleRow',
+    name: 'Single-arm row',
+    short: 'One-arm row',
+    equipment: 'one-kettlebell',
+    primaryMuscles: ['back', 'arms'],
+    secondaryMuscles: ['core', 'grip'],
+    targetType: 'repetitions',
+    targetMin: 6,
+    targetMax: 8,
+    perSide: true,
+    instructions: [
+      "Staggered stance, front forearm resting on your front thigh, bell in the opposite hand.",
+      "Flat back, torso close to parallel with the floor.",
+      "Pull the bell to your hip, elbow brushing your side.",
+      "Lower to a full stretch. Switch arms at the halfway beep."
+    ],
+    watchFor: "Twisting your torso open to heave the bell up. Your chest stays facing the floor.",
+    cue: 'Elbow to the hip, no twist'
+  },
+  snatch: {
+    id: 'snatch',
+    name: 'One-arm snatch',
+    short: 'Snatch',
+    equipment: 'one-kettlebell',
+    primaryMuscles: ['glutes', 'shoulders', 'back'],
+    secondaryMuscles: ['hamstrings', 'grip', 'core'],
+    targetType: 'repetitions',
+    targetMin: 5,
+    targetMax: 7,
+    perSide: true,
+    instructions: [
+      "Start like a one-arm swing: hike the bell back between your legs.",
+      "Snap the hips and pull the bell up close to your body.",
+      "As it rises past your chest, punch your hand up through the handle so the bell lands softly on your forearm at lockout.",
+      "Let it drop back into the swing and repeat. Switch arms at the halfway beep."
+    ],
+    watchFor: "The bell flipping over and slamming your forearm. Punch through early. If it still bangs, use a one-arm swing until it is smooth.",
+    cue: 'Hips throw it, punch through'
+  },
+  chinup: {
+    id: 'chinup',
+    name: 'Chin-up',
+    short: 'Chin-up',
+    equipment: 'bodyweight',
+    loadable: true,
+    primaryMuscles: ['back', 'arms'],
+    secondaryMuscles: ['core', 'grip'],
+    targetType: 'repetitions',
+    targetMin: 5,
+    targetMax: 7,
+    perSide: false,
+    instructions: [
+      "Hang from the bar with your palms facing you, hands about shoulder width.",
+      "Pull your shoulder blades down before you bend your arms.",
+      "Pull until your chin clears the bar, chest toward the bar.",
+      "Lower all the way to straight arms under control."
+    ],
+    watchFor: "Kicking or swinging to get up. If the reps are gone, do slow lowerings from the top instead.",
+    cue: 'Shoulders down, chest up'
+  },
+  jumpSquat: {
+    id: 'jumpSquat',
+    name: 'Jump squat',
+    short: 'Jump squat',
+    equipment: 'bodyweight',
+    primaryMuscles: ['quadriceps', 'glutes'],
+    secondaryMuscles: ['calves'],
+    targetType: 'repetitions',
+    targetMin: 10,
+    targetMax: 15,
+    perSide: false,
+    instructions: [
+      "Feet shoulder width, arms ready to swing.",
+      "Squat to about parallel, chest up.",
+      "Jump straight up as high as you can, swinging your arms.",
+      "Land softly on the balls of your feet and sink straight into the next rep."
+    ],
+    watchFor: "Landing stiff-legged or with knees caving in. Land quietly. If your knees complain, do bodyweight squats instead.",
+    cue: 'Land soft and quiet'
+  },
+  hollowHold: {
+    id: 'hollowHold',
+    name: 'Hollow body hold',
+    short: 'Hollow hold',
+    equipment: 'bodyweight',
+    primaryMuscles: ['core'],
+    secondaryMuscles: [],
+    targetType: 'seconds',
+    targetMin: 40,
+    perSide: false,
+    instructions: [
+      "Lie on your back and press your low back flat into the floor.",
+      "Lift your shoulders and legs a few inches, arms reaching past your ears.",
+      "Hold the shape like a shallow banana, breathing steadily.",
+      "Bend your knees or bring your arms to your sides to make it easier."
+    ],
+    watchFor: "Your low back peeling off the floor. The moment it lifts, shorten the lever by tucking your knees.",
+    cue: 'Low back glued down'
   }
 };
 
@@ -389,38 +570,52 @@ export const WORKOUTS = {
     id: 'A',
     name: 'Workout A',
     emphasis: 'Hinge + pull',
-    rounds: 5,
-    intervals: ['swing', 'row', 'farmer']
+    rounds: 3,
+    workSeconds: 40,
+    // Grip-heavy moves are split up by the press so grip is not the limiter.
+    intervals: ['swing', 'row', 'pushPress', 'slRdl', 'farmer']
   },
   B: {
     id: 'B',
     name: 'Workout B',
     emphasis: 'Squat + push',
-    rounds: 5,
-    intervals: ['frontSquat', 'floorPress', 'plankDrag']
+    rounds: 3,
+    workSeconds: 40,
+    intervals: ['frontSquat', 'floorPress', 'lateralLunge', 'pullover', 'plankDrag']
   },
   C: {
     id: 'C',
     name: 'Workout C',
     emphasis: 'Unilateral + shoulders',
-    rounds: 5,
-    intervals: ['reverseLunge', 'cleanPress', 'suitcase']
+    rounds: 3,
+    workSeconds: 40,
+    intervals: ['reverseLunge', 'cleanPress', 'singleRow', 'snatch', 'suitcase']
   },
   D: {
     id: 'D',
     name: 'Bodyweight',
     emphasis: 'Pull + push',
-    rounds: 5,
-    intervals: ['pullup', 'pushup', 'dip']
+    rounds: 3,
+    workSeconds: 40,
+    // Two pulls to one push: bodyweight comes round three times a cycle, so
+    // this is where the week's push/pull balance is set.
+    intervals: ['pullup', 'pushup', 'jumpSquat', 'chinup', 'hollowHold']
   },
   RECOVERY: {
     id: 'RECOVERY',
     name: 'Recovery',
     emphasis: 'Mobility + carries',
     rounds: 3,
+    workSeconds: null,
     intervals: ['halo', 'gluteBridge', 'deadBug', 'hipFlexor', 'lightCarry']
   }
 };
+
+// True when an exercise should get the "switch sides" beep halfway through
+// its work. Alternating moves count every rep and do not need it.
+export function switchesHalfway(ex) {
+  return !!(ex.perSide || ex.switchHalfway);
+}
 
 // D and RECOVERY are deliberately absent: both must stay invisible to the
 // A -> B -> C rotation, which is driven by the last completed strength day.

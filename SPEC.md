@@ -52,7 +52,7 @@ Out of scope for Phase 1, planned for Phase 2:
 flowchart TD
     A["Open app"] --> B["Today's workout, already chosen"]
     B --> C["Start 15 minutes"]
-    C --> D["EMOM timer, 5 rounds"]
+    C --> D["EMOM timer, 3 rounds"]
     D --> E["Done"]
     E --> F["Rotation advances"]
 ```
@@ -83,7 +83,7 @@ Squat + push
         [ START 15 MINUTES ]
 
 Last session
-Workout A · 5 rounds · yesterday
+Workout A · 3 rounds · yesterday
 Swing 18 · Row 10 · Carry 40s
 ```
 
@@ -189,47 +189,73 @@ three weeks off is how the habit dies. De-loading is the default for a reason.
 
 ## 7. Workouts
 
-All strength workouts are 15-minute EMOM: three one-minute intervals per round,
-five rounds. Perform the work at the top of the minute, rest for the remainder.
+All training days are 15-minute EMOM: five one-minute intervals per round,
+three rounds. Each minute is **40 seconds of work and 20 seconds of rest**.
+Work for the full 40 seconds; the rep targets are what a solid 40 seconds
+looks like, not a set to finish early. One-sided movements switch at a beep
+halfway through the work. The 20-second rest is for logging the movement just
+done and setting up the next one, which the screen shows.
+
+Every kettlebell day mixes hinge, squat or lunge, push, pull and a carry or
+core hold, so a missed day never leaves a whole movement pattern out. Across
+one A/B/C cycle (which includes three Bodyweight days) pulling outnumbers
+pushing, which is deliberate.
 
 ### Workout A: Hinge and pull
 
-| Minute | Exercise | Target |
+| Slot | Exercise | Target |
 |---|---|---:|
 | 1 | Two-handed kettlebell swing | 15-20 reps |
 | 2 | Double-kettlebell bent-over row | 8-10 reps |
-| 3 | Double farmer hold or carry | 35-45 sec |
+| 3 | Double push press | 6-8 reps |
+| 4 | Single-leg Romanian deadlift | 5-6 reps per side |
+| 5 | Double farmer hold | 40 sec |
 
-Emphasis: glutes, hamstrings, back, grip, trunk.
+The press sits between the grip-heavy movements so grip is not the limiter.
 
 ### Workout B: Squat and push
 
-| Minute | Exercise | Target |
+| Slot | Exercise | Target |
 |---|---|---:|
-| 1 | Double-kettlebell front squat | 6-8 reps |
+| 1 | Double-kettlebell front squat | 8-10 reps |
 | 2 | Double-kettlebell floor press | 8-12 reps |
-| 3 | Plank with alternating kettlebell drag | 30-40 sec |
+| 3 | Goblet lateral lunge | 8-10 reps, alternating |
+| 4 | Kettlebell pullover | 10-12 reps |
+| 5 | Plank with alternating kettlebell drag | 40 sec |
 
-Substitution: double front squat becomes single-bell goblet squat, 10-12 reps.
-
-Emphasis: quadriceps, glutes, chest, triceps, trunk.
+Substitution: double front squat becomes single-bell goblet squat.
 
 ### Workout C: Unilateral and shoulder stability
 
-| Minute | Exercise | Target |
+| Slot | Exercise | Target |
 |---|---|---:|
-| 1 | Goblet reverse lunge | 6 reps per side |
-| 2 | One-arm clean and press | 5 reps per side |
-| 3 | Suitcase hold or carry | 20 sec per side |
+| 1 | Goblet reverse lunge | 5-6 reps per side |
+| 2 | One-arm clean and press | 4-6 reps per side |
+| 3 | Single-arm row | 6-8 reps per side |
+| 4 | One-arm snatch | 5-7 reps per side |
+| 5 | Suitcase hold | 20 sec per side |
 
 Substitution: standing clean and press becomes half-kneeling one-arm press.
 
-Emphasis: unilateral leg strength, shoulder stability, core, grip.
+### Bodyweight: Pull and push
+
+| Slot | Exercise | Target |
+|---|---|---:|
+| 1 | Pull-up | 5-7 reps |
+| 2 | Push-up | 12-16 reps |
+| 3 | Jump squat | 10-15 reps |
+| 4 | Chin-up | 5-7 reps |
+| 5 | Hollow body hold | 40 sec |
+
+Bodyweight comes round three times per A/B/C cycle, so it carries two pulls to
+one push. Dips stay in the exercise library for history but are out of the
+rotation.
 
 ### Recovery
 
 Three rounds of five one-minute movements: halo, glute bridge, dead bug,
 hip-flexor mobility, light suitcase carry.
+Recovery is not split into work and rest: each movement runs the full minute.
 
 Recovery never triggers progression and never advances the rotation.
 
@@ -335,8 +361,8 @@ Phase 1: a reverse-chronological list of sessions. Tap any one to open the same
 editable rows used during the workout.
 
 ```text
-Tue 25 Aug   Workout B · 5 rounds
-Mon 24 Aug   Workout A · 5 rounds
+Tue 25 Aug   Workout B · 3 rounds
+Mon 24 Aug   Workout A · 3 rounds
 Sun 23 Aug   Recovery
 Sat 22 Aug   skipped
 ```
@@ -431,11 +457,17 @@ The central feature.
 
 ### 13.1 Behavior
 
-- 15 minutes, 5 rounds, three one-minute intervals per round.
+- 15 minutes, 3 rounds, five one-minute intervals per round.
+- Training days split each minute into 40 seconds of work and 20 of rest;
+  Recovery runs each minute unsplit.
 - Three-second countdown before the first interval.
-- Audio signal at start, each new minute, and completion.
-- A tick every second over the final five seconds of each minute.
-- Next exercise shown before the current minute ends.
+- Audio: a high beep at the start of work, a lower beep at the start of rest,
+  a double beep halfway through work for one-sided movements, and a chime on
+  completion.
+- A tick every second over the final three seconds of work and of rest (five
+  seconds of each minute on Recovery).
+- During rest the next exercise takes the headline, while the logging row for
+  the one just finished stays on screen.
 - Pause, resume, previous interval, next interval.
 - Screen kept awake for the duration.
 - Active state survives a refresh or a browser suspension.
@@ -448,7 +480,8 @@ Remaining time is **derived from timestamps**, never decremented:
 elapsed   = now - startedAt - pausedTotal
 interval  = floor(elapsed / 60000)          // 0..14
 remaining = 60000 - (elapsed % 60000)
-round     = floor(interval / 3) + 1
+round     = floor(interval / 5) + 1
+segment   = (elapsed % 60000) < 40000 ? work : rest
 ```
 
 Nothing accumulates drift, and a mid-workout refresh restores the exact position.
