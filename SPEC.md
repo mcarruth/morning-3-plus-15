@@ -219,10 +219,12 @@ The press sits between the grip-heavy movements so grip is not the limiter.
 | Slot | Exercise | Target |
 |---|---|---:|
 | 1 | Double-kettlebell front squat | 8-10 reps |
-| 2 | Double-kettlebell floor press | 8-12 reps |
-| 3 | Goblet lateral lunge | 8-10 reps, alternating |
-| 4 | Kettlebell pullover | 10-12 reps |
+| 2 | Gorilla row | 10-12 reps, alternating |
+| 3 | Double-kettlebell floor press | 8-12 reps |
+| 4 | Goblet lateral lunge | 8-10 reps, alternating |
 | 5 | Double kettlebell deadlift | 10-12 reps |
+
+The row and the deadlift are kept apart so the low back gets a break.
 
 Substitution: double front squat becomes single-bell goblet squat.
 
@@ -245,11 +247,12 @@ Substitution: standing clean and press becomes half-kneeling one-arm press.
 | 1 | Pull-up | 5-7 reps |
 | 2 | Dip | 5-8 reps |
 | 3 | Chin-up | 5-7 reps |
-| 4 | Jump squat | 10-15 reps |
+| 4 | Bulgarian split squat | 6-8 reps per side |
 | 5 | Hanging leg raise | 6-10 reps |
 
 Bodyweight comes round three times per A/B/C cycle, so it carries two pulls to
-one push. The three hanging movements alternate with the dip and jump squat so
+one push. The split squat is low impact on purpose: the daily run
+already pounds the legs. The three hanging movements alternate with the dip and jump squat so
 grip recovers between them. Push-ups stay in the exercise library for
 history but are out of the rotation; the floor press covers that pattern.
 

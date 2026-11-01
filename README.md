@@ -89,7 +89,7 @@ behind it.
 
 ## Added weight
 
-Pull-ups, chin-ups, push-ups and dips carry an added-load field on top of the reps. It
+Pull-ups, chin-ups, push-ups, dips and split squats carry an added-load field on top of the reps. It
 starts at zero, steps in fives, and displays as `+15 lb` so it is never read as
 the weight of a bell. Belt for pull-ups and dips, vest or plate for push-ups.
 

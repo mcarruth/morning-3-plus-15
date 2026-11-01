@@ -443,25 +443,25 @@ export const EXERCISES = {
     watchFor: "The working knee caving inward or the heel lifting. Sit back into the hip rather than down onto the knee.",
     cue: 'Sit back into the hip'
   },
-  pullover: {
-    id: 'pullover',
-    name: 'Kettlebell pullover',
-    short: 'Pullover',
-    equipment: 'one-kettlebell',
-    primaryMuscles: ['back', 'chest'],
-    secondaryMuscles: ['core'],
+  gorillaRow: {
+    id: 'gorillaRow',
+    name: 'Gorilla row',
+    short: 'Gorilla row',
+    equipment: 'two-kettlebells',
+    primaryMuscles: ['back', 'arms'],
+    secondaryMuscles: ['core', 'grip'],
     targetType: 'repetitions',
     targetMin: 10,
     targetMax: 12,
     perSide: false,
     instructions: [
-      "Lie on your back, knees bent, holding one bell by the horns over your chest.",
-      "Press your low back into the floor.",
-      "Arms almost straight, lower the bell slowly behind your head until it nearly touches the floor.",
-      "Pull it back over your chest using your lats."
+      "Bells on the floor between your feet, feet a little wider than shoulder width.",
+      "Hinge with soft knees until your torso is close to parallel, and grip both handles.",
+      "Row one bell to your hip while pressing the other into the floor, then lower it and row the other side.",
+      "Keep alternating. Count every rep."
     ],
-    watchFor: "Your ribs flaring and low back arching as the bell goes overhead. Only go as far as your back stays flat.",
-    cue: 'Ribs down, pull with the lats'
+    watchFor: "Twisting your torso to heave the bell up, or standing taller as you tire. Hips and chest stay square to the floor.",
+    cue: 'Square hips, elbow to the pocket'
   },
   singleRow: {
     id: 'singleRow',
@@ -524,25 +524,26 @@ export const EXERCISES = {
     watchFor: "Kicking or swinging to get up. If the reps are gone, do slow lowerings from the top instead.",
     cue: 'Shoulders down, chest up'
   },
-  jumpSquat: {
-    id: 'jumpSquat',
-    name: 'Jump squat',
-    short: 'Jump squat',
+  splitSquat: {
+    id: 'splitSquat',
+    name: 'Bulgarian split squat',
+    short: 'Split squat',
     equipment: 'bodyweight',
+    loadable: true,
     primaryMuscles: ['quadriceps', 'glutes'],
-    secondaryMuscles: ['calves'],
+    secondaryMuscles: ['hamstrings', 'core'],
     targetType: 'repetitions',
-    targetMin: 10,
-    targetMax: 15,
-    perSide: false,
+    targetMin: 6,
+    targetMax: 8,
+    perSide: true,
     instructions: [
-      "Feet shoulder width, arms ready to swing.",
-      "Squat to about parallel, chest up.",
-      "Jump straight up as high as you can, swinging your arms.",
-      "Land softly on the balls of your feet and sink straight into the next rep."
+      "Stand a long stride in front of a chair or bench and rest the top of your back foot on it.",
+      "Lower straight down until your back knee nearly touches the floor, front shin close to vertical.",
+      "Drive through your front heel to stand back up.",
+      "Switch legs at the halfway beep. Hold a bell at your chest or a pair at your sides for added weight."
     ],
-    watchFor: "Landing stiff-legged or with knees caving in. Land quietly. If your knees complain, do bodyweight squats instead.",
-    cue: 'Land soft and quiet'
+    watchFor: "Standing too close to the bench, which drives the front knee far past the toes. If the back hip feels jammed, move the front foot further out.",
+    cue: 'Straight down, drive the front heel'
   },
   deadlift: {
     id: 'deadlift',
@@ -623,7 +624,8 @@ export const WORKOUTS = {
     emphasis: 'Squat + push',
     rounds: 3,
     workSeconds: 40,
-    intervals: ['frontSquat', 'floorPress', 'lateralLunge', 'pullover', 'deadlift']
+    // The row sits away from the deadlift so the low back gets a break.
+    intervals: ['frontSquat', 'gorillaRow', 'floorPress', 'lateralLunge', 'deadlift']
   },
   C: {
     id: 'C',
@@ -643,7 +645,7 @@ export const WORKOUTS = {
     // this is where the week's push/pull balance is set. The three hanging
     // movements are split up so grip gets a break between them. No planks or
     // holds: those are covered by a separate plank app.
-    intervals: ['pullup', 'dip', 'chinup', 'jumpSquat', 'hangingLegRaise']
+    intervals: ['pullup', 'dip', 'chinup', 'splitSquat', 'hangingLegRaise']
   },
   RECOVERY: {
     id: 'RECOVERY',
